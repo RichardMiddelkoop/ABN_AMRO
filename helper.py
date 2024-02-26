@@ -23,7 +23,7 @@ class GUI:
         ttk.Button(window, text = "Database file 2", command = lambda: self.set_path_database_2_field()).grid(row = 1, ipadx=5, ipady=15) # this is placed in 0 0
         ttk.Entry(window, textvariable = self.input_text1, width = 70).grid( row = 1, column = 1, ipadx=1, ipady=1) # this is placed in 0 1
 
-        ttk.Label(window, text = "Countrie(s) seperate by \";\"").grid(row = 2, ipadx=5, ipady=15) # this is placed in 0 0
+        ttk.Label(window, text = "Countrie(s) seperated by \";\"").grid(row = 2, ipadx=5, ipady=15) # this is placed in 0 0
         ttk.Entry(window, textvariable = self.input_countries, width = 70).grid( row = 2, column = 1, ipadx=1, ipady=1) # this is placed in 0 1
         
         ttk.Button(window, text = "Close", command=lambda: self.close_window(window)).grid(row = 3, ipadx=5, ipady=15) # this is placed in 0 0
@@ -57,6 +57,7 @@ class GUI:
         return str(self.countries)
 
 def getFiles():
+    """Helper function creates a popup to get user input for the path of the databases, and the countries to filter for"""
     window = tkinter.Tk()
     gui = GUI(window)
     window.mainloop()
