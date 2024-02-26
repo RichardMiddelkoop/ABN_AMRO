@@ -28,5 +28,6 @@ jobs:
           cache: 'pip'
       - name: Test with pytest and chipsa
         run: |
-          python -m pip install pytest chispa
+          python -m pip install --upgrade pip
+          pip install pytest chispa
           pytest
