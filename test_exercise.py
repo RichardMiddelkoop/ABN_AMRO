@@ -40,3 +40,20 @@ def test_select_columns_from_df():
     ]
     expected_df = spark.createDataFrame(expected_data, ["1", "3"])
     assert_df_equality(actual_df, expected_df)
+
+def test_rename_column_from_dict():
+    # (df, {"id": "client_identifier", "btc_a":"bitcoin_address", "cc_t":"credit_card_type"})
+    spark = (SparkSession.builder
+            .master("local")
+            .appName("chispa")
+            .getOrCreate())
+    source_data = [
+        ("ABN", " ", "AMRO")
+    ]
+    source_df = spark.createDataFrame(source_data, ["1","2","3"])
+    actual_df = rename_column_from_dict(source_df, {"1": "First", "2": "Second", "3":"Third"})
+    expected_data = [
+        ("ABN", " ", "AMRO")
+    ]
+    expected_df = spark.createDataFrame(expected_data, ["First", "Second", "Third"])
+    assert_df_equality(actual_df, expected_df)
