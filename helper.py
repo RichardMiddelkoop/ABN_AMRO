@@ -29,35 +29,96 @@ class GUI:
         ttk.Button(window, text = "Close", command=lambda: self.close_window(window)).grid(row = 3, ipadx=5, ipady=15) # this is placed in 0 0
 
     def set_path_database_field(self):
+        """
+        Set the database path field.
+
+        This method prompts the user to select a database file using a file dialog,
+        sets the `database_path` attribute of the object to the selected file path,
+        and updates the corresponding input text field with the selected path.
+
+        :param self: The object instance.
+        """
         self.database_path = askopenfilename() 
         self.input_text.set(self.database_path)
 
     def set_path_database_2_field(self):
+        """
+        Set the database path 2 field.
+
+        This method prompts the user to select a database file using a file dialog,
+        sets the `database_path_2` attribute of the object to the selected file path,
+        and updates the corresponding `input text1` field with the selected path.
+
+        :param self: The object instance.
+        """
         self.database_path_2 = askopenfilename()
         self.input_text1.set(self.database_path_2)
 
     def set_path_countries(self):
+        """
+        Set the database path field.
+
+        This method prompts the user to select a database file using a file dialog,
+        sets the `countries` attribute of the object to the selected file path,
+        and updates the corresponding `input_countries` field with the selected path.
+
+        :param self: The object instance.
+        """
         self.countries = self.input_countries.get()
         self.input_countries.set(self.countries)
     
     def close_window(self, window):
+        """
+        Close the window and set path countries.
+
+        This method sets the path countries and then quits the window.
+
+        :param self: The object instance.
+        :param window: The window to close.
+        """
         self.set_path_countries()
         window.quit()
 
-    def get_database_path(self): 
-        """ Function provides the databases full file path."""
+    def get_database_path(self):
+        """
+        Get the database path.
+
+        :param self: The object instance.
+        :return: The database path.
+        :rtype: str
+        """
         return self.database_path
 
     def get_database_path_2(self):
-        """Function provides the second databases full file path."""
+        """
+        Get the second database path.
+
+        :param self: The object instance.
+        :return: The second database path.
+        :rtype: str
+        """
         return self.database_path_2
 
     def get_countries(self):
-        """Function provides the countries to filter."""
+        """"
+        Get the user input of countries.
+
+        :param self: The object instance.
+        :return: The user input of countries.
+        :rtype: str
+        """
         return str(self.countries)
 
 def getFiles():
-    """Helper function creates a popup to get user input for the path of the databases, and the countries to filter for"""
+    """
+    Get files and countries through a graphical user interface.
+
+    This function creates a Tkinter window, initializes a GUI object, and starts the main event loop.
+    It then extracts the full file paths and countries selected by the user from the GUI object.
+
+    :return: A tuple containing the full file paths and countries selected by the user.
+    :rtype: tuple
+    """
     window = tkinter.Tk()
     gui = GUI(window)
     window.mainloop()
