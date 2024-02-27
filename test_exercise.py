@@ -1,6 +1,5 @@
 import pytest
 from chispa.dataframe_comparer import *
-import pyspark.sql.functions as F
 from exercise import *
 from pyspark.sql import SparkSession
 
@@ -18,13 +17,10 @@ def test_filter_column_by_string():
         (None,)
     ]
     source_df = spark.createDataFrame(source_data, ["country"])
-    actual_df = source_df.withColumn(
-        "clean_country",
-        filter_column_by_string(source_df, F.col("country"), "Netherlands, United Kingdom")
-    )
+    actual_df = filter_column_by_string(source_df, "country", "Netherlands, United Kingdom")
     expected_data = [
         ("United Kingdom",),
         ("Netherlands",)
     ]
-    expected_df = spark.createDataFrame(expected_data, ["country", "clean_country"])
+    expected_df = spark.createDataFrame(expected_data, ["country"])
     assert_df_equality(actual_df, expected_df)
