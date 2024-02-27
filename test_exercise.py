@@ -5,6 +5,14 @@ from pyspark.sql import SparkSession
 
 
 def test_filter_column_by_string():
+    """
+    Test the filter_column_by_string function.
+
+    This function sets up a SparkSession, creates a DataFrame with sample data,
+    calls the filter_column_by_string function with specific parameters,
+    and compares the actual result with the expected result using assert_df_equality.
+
+    """
     spark = (SparkSession.builder
             .master("local")
             .appName("chispa")
@@ -26,6 +34,14 @@ def test_filter_column_by_string():
     assert_df_equality(actual_df, expected_df)
 
 def test_select_columns_from_df():
+    """
+    Test the select_columns_from_df function.
+
+    This function sets up a SparkSession, creates a DataFrame with sample data,
+    calls the select_columns_from_df function with specific parameters,
+    and compares the actual result with the expected result using assert_df_equality.
+
+    """
     spark = (SparkSession.builder
             .master("local")
             .appName("chispa")
@@ -42,7 +58,14 @@ def test_select_columns_from_df():
     assert_df_equality(actual_df, expected_df)
 
 def test_rename_column_from_dict():
-    # (df, {"id": "client_identifier", "btc_a":"bitcoin_address", "cc_t":"credit_card_type"})
+    """
+    Test the rename_column_from_dict function.
+
+    This function sets up a SparkSession, creates a DataFrame with sample data,
+    calls the rename_column_from_dict function with specific parameters,
+    and compares the actual result with the expected result using assert_df_equality.
+
+    """
     spark = (SparkSession.builder
             .master("local")
             .appName("chispa")

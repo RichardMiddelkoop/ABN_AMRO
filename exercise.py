@@ -7,22 +7,81 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 def get_input(debug = False):
+    """
+    Get input data for the program.
+
+    If `debug` is True, returns mock input data.
+    Otherwise, prompts the user to input file paths and countries.
+
+    :param debug: Flag indicating whether to use mock input data (default is False).
+    :type debug: bool
+    :return: A tuple containing file paths and countries.
+             If `debug` is True, returns mock data.
+             Otherwise, prompts the user for input and returns the obtained values.
+    :rtype: tuple
+    """
+    # Mock input data
     if debug:
-        return ("/home/richard/ABN/codc-interviews/dataset_one.csv", "/home/richard/ABN/codc-interviews/dataset_two.csv", "United Kingdom; Netherlands")
+        return ("/home/richard/ABN/codc-interviews/dataset_one.csv", 
+                "/home/richard/ABN/codc-interviews/dataset_two.csv", 
+                "United Kingdom; Netherlands")
+    # Prompt user for input
     return getFiles()
 
 def read_csv(file_path: str):
+    """
+    Read a CSV file into a Spark DataFrame.
+
+    :param file_path: The path to the CSV file.
+    :type file_path: str
+    :return: A Spark DataFrame containing the data from the CSV file.
+    :rtype: pyspark.sql.DataFrame
+    """
     spark = SparkSession.builder.getOrCreate()
     df = spark.read.csv(file_path, header=True)
     return df
 
 def filter_column_by_string(df, col_name, string, seperator = ", "):
+    """
+    Filter a DataFrame based on a string value contained in a specified column.
+
+    :param df: The DataFrame to filter.
+    :type df: pyspark.sql.DataFrame
+    :param col_name: The name of the column to filter.
+    :type col_name: str
+    :param string: The string value to filter by.
+    :type string: str
+    :param separator: The separator used to split the string value (default is ", ").
+    :type separator: str
+    :return: A new DataFrame containing rows where the specified column matches the given string value.
+    :rtype: pyspark.sql.DataFrame
+    """
     return df.where(col(col_name).isin(string.split(seperator)))
 
 def select_columns_from_df(df ,*args):
+    """
+    Select specific columns from a DataFrame.
+
+    :param df: The DataFrame from which to select columns.
+    :type df: pyspark.sql.DataFrame
+    :param args: Variable number of column names to select.
+    :type args: str
+    :return: A new DataFrame containing only the selected columns.
+    :rtype: pyspark.sql.DataFrame
+    """
     return df.select(*args)
 
 def rename_column_from_dict(df, dict_of_col_names):
+    """
+    Rename columns in a DataFrame based on a dictionary mapping old column names to new ones.
+
+    :param df: The DataFrame to rename columns in.
+    :type df: pyspark.sql.DataFrame
+    :param dict_of_col_names: A dictionary mapping old column names to new ones.
+    :type dict_of_col_names: dict
+    :return: A new DataFrame with columns renamed according to the provided dictionary.
+    :rtype: pyspark.sql.DataFrame
+    """
     for old_col_pattern, new_col in dict_of_col_names.items():
         regex = re.compile(old_col_pattern)
         renamed_cols = [col_name if not regex.match(col_name) else new_col for col_name in df.columns]
