@@ -1,6 +1,6 @@
 import pytest
 from chispa.dataframe_comparer import *
-from exercise import *
+from src.ABN_AMRO_exercise.exercise import *
 from pyspark.sql import SparkSession
 
 
