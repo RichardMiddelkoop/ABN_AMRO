@@ -3,6 +3,8 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 from helper import getFiles
+import logging
+from logging.handlers import RotatingFileHandler
 
 def get_input(debug = False):
     if debug:
@@ -28,8 +30,28 @@ def rename_column_from_dict(df, dict_of_col_names):
     return df
 
 if __name__ == '__main__':
+
+    # Logging
+    logging.basicConfig(
+        handlers=[
+            RotatingFileHandler(
+            str(os.getcwd() + '/logs/file.log'),
+            maxBytes=10240000,
+            backupCount=5
+            )
+        ],
+        level=logging.INFO,
+        format='%(asctime)s %(levelname)s PID_%(process)d %(message)s'
+    )
+    
+
+
     # Get user input
-    database_path_1, database_path_2, input_countries = get_input(True)
+    try:
+        database_path_1, database_path_2, input_countries = get_input(False)
+        logging.info(f'input recieved db1_path:{database_path_1} \t db2_path:{database_path_2} \t countries: {input_countries}')
+    except Exception as e:
+        logging.error(f'Input failed: {e}')
 
     # Data transformation
     df1 = select_columns_from_df(read_csv(database_path_1), "id", "email", "country")
@@ -37,4 +59,10 @@ if __name__ == '__main__':
     df2 = select_columns_from_df(read_csv(database_path_2),"id", "btc_a","cc_t")
     df = df1.join(df2, df1.id == df2.id, "left").select(df1.id, "email", "country", "btc_a", "cc_t")
     df = rename_column_from_dict(df, {"id": "client_identifier", "btc_a":"bitcoin_address", "cc_t":"credit_card_type"})
-    df.write.csv(os.getcwd() + "/client_data")
+
+    # Save user input
+    try:
+        df.write.mode("overwrite").csv(os.getcwd() + "/client_data")
+        logging.info('Saved client data with succes')
+    except Exception as e:
+        logging.error(f'Saving data failed {e}')
