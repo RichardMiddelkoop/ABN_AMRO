@@ -29,7 +29,7 @@ jobs:
       - name: Setup Spark
         run: |
           cd /tmp
-          wget -q https://aws-glue-etl-artifacts.s3.amazonaws.com/glue-1.0/spark-3.5.0-bin-hadoop3.tgz
+          wget -q https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
           tar xzf spark-3.5.0-bin-hadoop3.tgz -C /home/runner
           rm spark-3.5.0-bin-hadoop3.tgz
           echo SPARK_HOME=/home/runner/spark-3.5.0-bin-hadoop3.tgz >> $GITHUB_ENV
