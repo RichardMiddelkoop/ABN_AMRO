@@ -14,7 +14,7 @@ def test_filter_column_by_string():
         ("United Kingdom",),
         ("UnitedKingdom",),
         ("Netherlands",),
-        ("!#@__UK&&"),
+        ("!#@__UK&&",),
         (None,)
     ]
     source_df = spark.createDataFrame(source_data, ["country"])
