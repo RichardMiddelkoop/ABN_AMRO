@@ -30,7 +30,7 @@ jobs:
       - name: setup spark
         uses: vemonet/setup-spark@v1
         with:
-          spark-version: '3.5.0'
+          spark-version: '3.5.1'
       - name: Test with pytest and chipsa
         run: |
           python -m pip install --upgrade pip
