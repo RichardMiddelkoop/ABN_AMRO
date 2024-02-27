@@ -1,6 +1,59 @@
+import pytest
+from chispa.dataframe_comparer import *
+from exercise import *
+from pyspark.sql import SparkSession
 
-def initial_function(x):
-    return x.upper()
 
-def test_initial_function():
-    assert initial_function('abn_amro') == 'ABN_AMRO'
+def test_filter_column_by_string():
+    spark = (SparkSession.builder
+            .master("local")
+            .appName("chispa")
+            .getOrCreate())
+    source_data = [
+        ("United Kingdom",),
+        ("UnitedKingdom",),
+        ("Netherlands",),
+        ("!#@__UK&&",),
+        (None,)
+    ]
+    source_df = spark.createDataFrame(source_data, ["country"])
+    actual_df = filter_column_by_string(source_df, "country", "Netherlands, United Kingdom")
+    expected_data = [
+        ("United Kingdom",),
+        ("Netherlands",)
+    ]
+    expected_df = spark.createDataFrame(expected_data, ["country"])
+    assert_df_equality(actual_df, expected_df)
+
+def test_select_columns_from_df():
+    spark = (SparkSession.builder
+            .master("local")
+            .appName("chispa")
+            .getOrCreate())
+    source_data = [
+        ("ABN", " ", "AMRO")
+    ]
+    source_df = spark.createDataFrame(source_data, ["1","2","3"])
+    actual_df = select_columns_from_df(source_df, "1", "3")
+    expected_data = [
+        ("ABN", "AMRO")
+    ]
+    expected_df = spark.createDataFrame(expected_data, ["1", "3"])
+    assert_df_equality(actual_df, expected_df)
+
+def test_rename_column_from_dict():
+    # (df, {"id": "client_identifier", "btc_a":"bitcoin_address", "cc_t":"credit_card_type"})
+    spark = (SparkSession.builder
+            .master("local")
+            .appName("chispa")
+            .getOrCreate())
+    source_data = [
+        ("ABN", " ", "AMRO")
+    ]
+    source_df = spark.createDataFrame(source_data, ["1","2","3"])
+    actual_df = rename_column_from_dict(source_df, {"1": "First", "2": "Second", "3":"Third"})
+    expected_data = [
+        ("ABN", " ", "AMRO")
+    ]
+    expected_df = spark.createDataFrame(expected_data, ["First", "Second", "Third"])
+    assert_df_equality(actual_df, expected_df)
