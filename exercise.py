@@ -1,4 +1,5 @@
 import re
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 from helper import getFiles
@@ -36,5 +37,4 @@ if __name__ == '__main__':
     df2 = select_columns_from_df(read_csv(database_path_2),"id", "btc_a","cc_t")
     df = df1.join(df2, df1.id == df2.id, "left").select(df1.id, "email", "country", "btc_a", "cc_t")
     df = rename_column_from_dict(df, {"id": "client_identifier", "btc_a":"bitcoin_address", "cc_t":"credit_card_type"})
-    df.show()
-    # Write output
+    df.write.csv(os.getcwd() + "/client_data")
